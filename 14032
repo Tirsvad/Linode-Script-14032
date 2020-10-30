@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+#<UDF name="scriptversion" Label="Script edition" oneOf="Latest,v0.1-beta.1" example="Script version." default="v0.1-beta.1"/>
+#<UDF name="url" default="https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetupDefaultConfig/tarball/master" Label="Url link to a your own configuration as a tarball. With strip components 2" example="https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetupDefaultConfig/tarball/master"/>
+#
+
+set -e # Exit immediately if a command exits with a non-zero status.
+set -u #
+exec &> /root/stackscript.log
+
+# check running compatible system
+[ -f /etc/os-release ] && {
+    # freedesktop.org and systemd
+    . /etc/os-release
+    OS=$NAME
+    OS_VER=$VERSION_ID
+} || {
+    # Fall back to uname, e.g. "Linux <version>", also works for BSD, etc.
+    OS=$(uname -s)
+    OS_VER=$(uname -r)
+}
+
+case $OS in
+    "CentOS Linux")
+        dnf -y install tar
+        dnf -y install curl
+        ;;
+    *)
+        locale-gen
+        apt-get -qq instal curl tar
+esac
+
+[ ${SCRIPTVERSION}=="v0.1-beta-1" ] && curl -L https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetup/archive/v0.1-beta-1.tar.gz | tar xz -C /root --strip-components 2
+[ ${SCRIPTVERSION}=="Development" ] && curl -L https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetup/tarball/master | tar xz -C /root --strip-components 2
+
+cd /root/LinuxServerSetup
+
+export DEBIAN_FRONTEND=noninteractive
+
+[ ${URL:-} ] && ./setup.sh --url $URL --strip-components 2 || ./setup.sh
