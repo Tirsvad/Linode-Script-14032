@@ -30,7 +30,7 @@ case $OS in
         apt-get -qq instal curl tar
 esac
 
-[ ${SCRIPTVERSION}=="v0.1-beta-1" ] && curl -L https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetup/archive/v0.1-beta-1.tar.gz | tar xz -C /root --strip-components 2
+[ ${SCRIPTVERSION}=="v0.1" ] && curl -L https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetup/archive/v0.1.tar.gz | tar xz -C /root --strip-components 2
 [ ${SCRIPTVERSION}=="Development" ] && curl -L https://github.com/TirsvadCMS-Bashscripts/LinuxServerSetup/tarball/master | tar xz -C /root --strip-components 2
 
 cd /root/LinuxServerSetup
